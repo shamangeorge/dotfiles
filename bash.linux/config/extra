@@ -1,0 +1,20 @@
+# extras
+
+# This loads NVM if it exists
+# Don't forget to alias your default version
+if [ -d "$HOME/.nvm/" ]; then
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  #  nvm alias default 10
+  nvm use 12
+fi
+
+# This loads RVM if it exists
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" && rvm use 2.6.5
+
+# This loads sdk man if it exists
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# Direnv setup
+command -v direnv >/dev/null 2>&1 && eval "$(direnv hook bash)"
