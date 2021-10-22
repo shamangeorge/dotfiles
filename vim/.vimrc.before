@@ -1,0 +1,14 @@
+call janus#disable_plugin('ack')
+call janus#disable_plugin('vim-gitgutter')
+
+if has('nvim')
+  tnoremap <Esc> <C-\><C-n>
+  tnoremap <A-h> <C-\><C-n><C-w>LEFT
+  tnoremap <A-j> <C-\><C-n><C-w>UP
+  tnoremap <A-k> <C-\><C-n><C-w>DOWN
+  tnoremap <A-l> <C-\><C-n><C-w>RIGHT
+  nnoremap <A-h> <C-w>LEFT
+  nnoremap <A-j> <C-w>UP
+  nnoremap <A-k> <C-w>DOWN
+  nnoremap <A-l> <C-w>RIGHT
+endif
