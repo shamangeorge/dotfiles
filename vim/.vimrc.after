@@ -1,0 +1,475 @@
+" ############################################################################
+" Choose your theme colors
+" ############################################################################
+color molokai
+
+" ############################################################################
+" notes.vim
+" ############################################################################
+let g:notes_directories = ['~/Dropbox/notes/_posts']
+let g:notes_suffix = '.md'
+
+" ############################################################################
+" Follow my lead (lists your leader map)
+" ############################################################################
+let g:fml_all_sources = 1
+
+" ############################################################################
+" Enable deoplete
+" ############################################################################
+let g:deoplete#enable_at_startup = 1
+
+" ############################################################################
+" https://github.com/nathanaelkane/vim-indent-guides
+" Vim indent guides
+" <leader> ig
+" ############################################################################
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd guibg=black ctermbg=darkgrey
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=darkgrey ctermbg=lightyellow
+
+" ############################################################################
+" Fuck the mouse and only allow scrolling
+" ############################################################################
+highlight Normal ctermbg=none
+highlight NonText ctermbg=none
+set mouse-=a
+
+" ############################################################################
+" Handle binary files and read in hex mode
+" http://vim.wikia.com/wiki/Improved_hex_editing
+" toggle hex mode
+" ############################################################################
+nnoremap <C-A> :Hex<CR>
+inoremap <C-A> <Esc>:Hex<CR>
+vnoremap <C-A> :<C-U>Hex<CR>
+
+"" ex command for toggling hex mode - define mapping if desired
+command -bar Hex call ToggleHex()
+
+"" helper function to toggle hex mode
+function ToggleHex()
+  " hex mode should be considered a read-only operation
+  " save values for modified and read-only for restoration later,
+  " and clear the read-only flag for now
+  let l:modified=&mod
+  let l:oldreadonly=&readonly
+  let &readonly=0
+  let l:oldmodifiable=&modifiable
+  let &modifiable=1
+  if !exists("b:editHex") || !b:editHex
+    " save old options
+    let b:oldft=&ft
+    let b:oldbin=&bin
+    " set new options
+    setlocal binary " make sure it overrides any textwidth, etc.
+    silent :e " this will reload the file without trickeries
+              "(DOS line endings will be shown entirely )
+    let &ft="xxd"
+    " set status
+    let b:editHex=1
+    " switch to hex editor
+    %!xxd
+  else
+    " restore old options
+    let &ft=b:oldft
+    if !b:oldbin
+      setlocal nobinary
+    endif
+    " set status
+    let b:editHex=0
+    " return to normal editing
+    %!xxd -r
+  endif
+  " restore values for modified and read only state
+  let &mod=l:modified
+  let &readonly=l:oldreadonly
+  let &modifiable=l:oldmodifiable
+endfunction
+" vim -b : edit binary using xxd-format!
+augroup Binary
+  au!
+  au BufReadPre  *.bin let &bin=1
+  au BufReadPost *.bin if &bin | %!xxd
+  au BufReadPost *.bin set ft=xxd | endif
+  au BufWritePre *.bin if &bin | %!xxd -r
+  au BufWritePre *.bin endif
+  au BufWritePost *.bin if &bin | %!xxd
+  au BufWritePost *.bin set nomod | endif
+augroup END
+
+" autocmds to automatically enter hex mode and handle file writes properly
+if has("autocmd")
+  " vim -b : edit binary using xxd-format!
+  augroup Binary
+    au!
+
+    " set binary option for all binary files before reading them
+    au BufReadPre *.bin,*.hex setlocal binary
+
+    " if on a fresh read the buffer variable is already set, it's wrong
+    au BufReadPost *
+          \ if exists('b:editHex') && b:editHex |
+          \   let b:editHex = 0 |
+          \ endif
+
+    " convert to hex on startup for binary files automatically
+    au BufReadPost *
+          \ if &binary | Hexmode | endif
+
+    " When the text is freed, the next time the buffer is made active it will
+    " re-read the text and thus not match the correct mode, we will need to
+    " convert it again if the buffer is again loaded.
+    au BufUnload *
+          \ if getbufvar(expand("<afile>"), 'editHex') == 1 |
+          \   call setbufvar(expand("<afile>"), 'editHex', 0) |
+          \ endif
+
+    " before writing a file when editing in hex mode, convert back to non-hex
+    au BufWritePre *
+          \ if exists("b:editHex") && b:editHex && &binary |
+          \  let oldro=&ro | let &ro=0 |
+          \  let oldma=&ma | let &ma=1 |
+          \  silent exe "%!xxd -r" |
+          \  let &ma=oldma | let &ro=oldro |
+          \  unlet oldma | unlet oldro |
+          \ endif
+
+    " after writing a binary file, if we're in hex mode, restore hex mode
+    au BufWritePost *
+          \ if exists("b:editHex") && b:editHex && &binary |
+          \  let oldro=&ro | let &ro=0 |
+          \  let oldma=&ma | let &ma=1 |
+          \  silent exe "%!xxd" |
+          \  exe "set nomod" |
+          \  let &ma=oldma | let &ro=oldro |
+          \  unlet oldma | unlet oldro |
+          \ endif
+  augroup END
+endif
+
+" ############################################################################
+" Eslint Linting with syntastic
+" ############################################################################
+let g:syntastic_javascript_checkers = ["eslint"]
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" ############################################################################
+" Customized startify configuration
+" ############################################################################
+let g:startify_custom_header =
+      \ map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
+let g:startify_custom_footer =
+      \ ['', "   hakuna mapdata.", '']
+let g:startify_session_dir = '~/.config/nvim/session'
+let g:startify_list_order = [
+      \ ['   My most recently', '   used files'],
+      \ 'files',
+      \ ['   My most recently used files in the current directory:'],
+      \ 'dir',
+      \ ['   These are my sessions:'],
+      \ 'sessions',
+      \ ['   These are my bookmarks:'],
+      \ 'bookmarks',
+      \ ]
+let g:startify_bookmarks = [ {'v': '~/.vim'}, '~/.local/dotfiles', "~/.config", "~/.notes", "~/dev" ]
+    let g:startify_files_number = 10
+    let g:startify_session_autoload = 0
+    let g:startify_session_persistence = 0
+    let g:startify_session_delete_buffers = 0
+    let g:startify_change_to_dir = 1
+    let g:startify_change_to_vcs_root = 0
+
+" ############################################################################
+" My Vim Airline customizations
+" ############################################################################
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.crypt = '🔒'
+let g:airline_symbols.linenr = '☰'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.maxlinenr = '㏑'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.spell = 'Ꞩ'
+let g:airline_symbols.notexists = 'Ɇ'
+let g:airline_symbols.whitespace = 'Ξ'
+
+" powerline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = '☰'
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.dirty='⚡'
+
+" old vim-powerline symbols
+" let g:airline_left_sep = '⮀'
+" let g:airline_left_alt_sep = '⮁'
+" let g:airline_right_sep = '⮂'
+" let g:airline_right_alt_sep = '⮃'
+" let g:airline_symbols.branch = '⭠'
+" let g:airline_symbols.readonly = '⭤'
+" let g:airline_symbols.linenr = '⭡'
+
+" vim -airline sickness
+" Hakuna Matata
+function! AccentDemo()
+  let keys = ["H","a","k","u","n","a"]
+  for k in keys
+    call airline#parts#define_text(k, k)
+  endfor
+  call airline#parts#define_accent('H', 'red')
+  call airline#parts#define_accent('a', 'green')
+  call airline#parts#define_accent('k', 'blue')
+  call airline#parts#define_accent('u', 'yellow')
+  call airline#parts#define_accent('n', 'orange')
+  call airline#parts#define_accent('a', 'purple')
+  let g:airline_section_a = airline#section#create(keys)
+endfunction
+autocmd VimEnter * call AccentDemo()
+" ############################################################################
+" Awesome airline functionality
+" https://korya-dotfiles.googlecode.com/svn/trunk/.vim/bundle/vim-airline/autoload/airline.vim
+" MIT License. Copyright (c) 2013-2015 Bailey Ling.
+" vim: et ts=2 sts=2 sw=2
+" ############################################################################
+
+let g:airline_statusline_funcrefs = get(g:, 'airline_statusline_funcrefs', [])
+
+let s:sections = ['a','b','c','gutter','x','y','z','warning']
+let s:inactive_funcrefs = []
+
+function! airline#add_statusline_func(name)
+  call airline#add_statusline_funcref(function(a:name))
+endfunction
+
+function! airline#add_statusline_funcref(function)
+  if index(g:airline_statusline_funcrefs, a:function) >= 0
+    echohl WarningMsg
+    echo 'The airline statusline funcref '.string(a:function).' has already been added.'
+    echohl NONE
+    return
+  endif
+  call add(g:airline_statusline_funcrefs, a:function)
+endfunction
+
+function! airline#remove_statusline_func(name)
+  let i = index(g:airline_statusline_funcrefs, function(a:name))
+  if i > -1
+    call remove(g:airline_statusline_funcrefs, i)
+  endif
+endfunction
+
+function! airline#add_inactive_statusline_func(name)
+  call add(s:inactive_funcrefs, function(a:name))
+endfunction
+
+function! airline#load_theme()
+  if exists('*airline#themes#{g:airline_theme}#refresh')
+    call airline#themes#{g:airline_theme}#refresh()
+  endif
+
+  let palette = g:airline#themes#{g:airline_theme}#palette
+  call airline#themes#patch(palette)
+
+  if exists('g:airline_theme_patch_func')
+    let Fn = function(g:airline_theme_patch_func)
+    call Fn(palette)
+  endif
+
+  call airline#highlighter#load_theme()
+  call airline#extensions#load_theme()
+  call airline#update_statusline()
+endfunction
+
+function! airline#switch_theme(name)
+  try
+    let palette = g:airline#themes#{a:name}#palette "also lazy loads the theme
+    let g:airline_theme = a:name
+  catch
+    echohl WarningMsg | echo 'The specified theme cannot be found.' | echohl NONE
+    if exists('g:airline_theme')
+      return
+    else
+      let g:airline_theme = 'dark'
+    endif
+  endtry
+
+  let w:airline_lastmode = ''
+  call airline#load_theme()
+
+  " this is required to prevent clobbering the startup info message, i don't know why...
+  call airline#check_mode(winnr())
+endfunction
+
+function! airline#switch_matching_theme()
+  if exists('g:colors_name')
+    try
+      let palette = g:airline#themes#{g:colors_name}#palette
+      call airline#switch_theme(g:colors_name)
+      return 1
+    catch
+      for map in items(g:airline_theme_map)
+        if match(g:colors_name, map[0]) > -1
+          call airline#switch_theme(map[1])
+          return 1
+        endif
+      endfor
+    endtry
+  endif
+  return 0
+endfunction
+
+function! airline#update_statusline()
+  for nr in filter(range(1, winnr('$')), 'v:val != winnr()')
+    if airline#util#getwinvar(nr, 'airline_disabled', 0)
+      continue
+    endif
+    call setwinvar(nr, 'airline_active', 0)
+    let context = { 'winnr': nr, 'active': 0, 'bufnr': winbufnr(nr) }
+    call s:invoke_funcrefs(context, s:inactive_funcrefs)
+  endfor
+
+  unlet! w:airline_render_left
+  unlet! w:airline_render_right
+  for section in s:sections
+    unlet! w:airline_section_{section}
+  endfor
+
+  let w:airline_active = 1
+  let context = { 'winnr': winnr(), 'active': 1, 'bufnr': winbufnr(winnr()) }
+  call s:invoke_funcrefs(context, g:airline_statusline_funcrefs)
+endfunction
+
+let s:contexts = {}
+let s:core_funcrefs = [
+      \ function('airline#extensions#apply'),
+      \ function('airline#extensions#default#apply') ]
+function! s:invoke_funcrefs(context, funcrefs)
+  let builder = airline#builder#new(a:context)
+  let err = airline#util#exec_funcrefs(a:funcrefs + s:core_funcrefs, builder, a:context)
+  if err == 1
+    let a:context.line = builder.build()
+    let s:contexts[a:context.winnr] = a:context
+    call setwinvar(a:context.winnr, '&statusline', '%!airline#statusline('.a:context.winnr.')')
+  endif
+endfunction
+
+function! airline#statusline(winnr)
+  if has_key(s:contexts, a:winnr)
+    return '%{airline#check_mode('.a:winnr.')}'.s:contexts[a:winnr].line
+  endif
+
+  " in rare circumstances this happens...see #276
+  return ''
+endfunction
+
+function! airline#check_mode(winnr)
+  let context = s:contexts[a:winnr]
+
+  if get(w:, 'airline_active', 1)
+    let l:m = mode()
+    if l:m ==# "i"
+      let l:mode = ['insert']
+    elseif l:m ==# "R"
+      let l:mode = ['replace']
+    elseif l:m =~# '\v(v|V||s|S|)'
+      let l:mode = ['visual']
+    else
+      let l:mode = ['normal']
+    endif
+    let w:airline_current_mode = get(g:airline_mode_map, l:m, l:m)
+  else
+    let l:mode = ['inactive']
+    let w:airline_current_mode = get(g:airline_mode_map, '__')
+  endif
+
+  if g:airline_detect_modified && &modified
+    call add(l:mode, 'modified')
+  endif
+
+  if g:airline_detect_paste && &paste
+    call add(l:mode, 'paste')
+  endif
+
+  if &readonly || ! &modifiable
+    call add(l:mode, 'readonly')
+  endif
+
+  let mode_string = join(l:mode)
+  if get(w:, 'airline_lastmode', '') != mode_string
+    call airline#highlighter#highlight_modified_inactive(context.bufnr)
+    call airline#highlighter#highlight(l:mode)
+    let w:airline_lastmode = mode_string
+  endif
+
+  return ''
+endfunction
+
+" ############################################################################
+" Vim Gist settings
+" ############################################################################
+let g:gist_clip_command = 'xclip -selection clipboard'
+let g:gist_detect_filetype = 1
+let g:gist_open_browser_after_post = 1
+let g:gist_browser_command = 'w3m %URL%'
+let g:gist_show_privates = 1
+let g:gist_post_private = 1
+" Only :w! updates a gist.
+let g:gist_update_on_write = 2
+let g:gist_get_multiplefile = 1
+
+" ############################################################################
+" Vim customized remaps
+" ############################################################################
+" The puts debuggerer
+nnoremap <leader>wtf oputs "#" * 90<c-m>puts caller<c-m>puts "#" * 90<esc>
+
+" resize panes on the fly
+nnoremap <silent> <Leader>= :exe "resize +1"<CR>
+nnoremap <silent> <Leader>- :exe "resize -1"<CR>
+nnoremap <silent> <Leader>+ :exe "vertical resize +1"<CR>
+nnoremap <silent> <Leader>_ :exe "vertical resize -1"<CR>
+
+" ############################################################################
+" vim-devicons
+" ############################################################################
+let g:webdevicons_enable = 1
+let g:webdevicons_enable_nerdtree = 1
+let g:webdevicons_enable_airline_statusline = 1
+let g:webdevicons_enable_ctrlp = 1
+let g:webdevicons_enable_startify = 1
+let g:webdevicons_enable_flagship_statusline = 1
+let g:webdevicons_conceal_nerdtree_brackets = 1
+let g:webdevicons_enable_denite = 1
+set guifont=monofur\ for\ Powerline:h11
+
+augroup my-glyph-palette
+  autocmd! *
+  autocmd FileType fern call glyph_palette#apply()
+  autocmd FileType nerdtree,startify call glyph_palette#apply()
+augroup END
