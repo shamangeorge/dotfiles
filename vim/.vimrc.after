@@ -473,3 +473,7 @@ augroup my-glyph-palette
   autocmd FileType fern call glyph_palette#apply()
   autocmd FileType nerdtree,startify call glyph_palette#apply()
 augroup END
+
+" Save swap files elsewhere
+set directory^=$HOME/.config/tmp/vimswap
+augroup END
