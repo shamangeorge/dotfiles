@@ -3,6 +3,7 @@
 export DOTFILES="$HOME/.local/dotfiles"
 export VIM_CONFIG="$DOTFILES/vim"
 export JANUS_REPO="$VIM_CONFIG/.config/nvim"
+export JANUS_VIMRC="$JANUS_REPO/janus/vim/vimrc"
 export NEOVIM_CONFIG="$HOME/.config/nvim"
 export HOME_VIM_CONFIG="$HOME/.vim"
 export VIM_PLUGINS="$VIM_CONFIG/.janus"
@@ -16,6 +17,7 @@ git clone git@github.com:carlhuda/janus.git $JANUS_REPO
 cd $JANUS_REPO
 rake
 mkdir $VIM_PLUGINS
+ln -svif $JANUS_VIMRC $VIMRC
 ln -svif $VIMRC $INIT_VIM
 ln -svif $VIM_CONFIG/.vimrc.before $VIMRC_BEFORE
 ln -svif $VIM_CONFIG/.vimrc.after $VIMRC_AFTER
@@ -46,3 +48,9 @@ git clone git@github.com:diepm/vim-rest-console.git
 git clone git@github.com:mhinz/vim-startify.git
 git clone git@github.com:wakatime/vim-wakatime.git
 git clone git@github.com:lambdalisue/glyph-palette.vim
+git clone git@github.com:pangloss/vim-javascript.git
+git clone git@github.com:leafgarland/typescript-vim.git
+git clone git@github.com:MaxMEllon/vim-jsx-pretty.git
+git clone git@github.com:peitalin/vim-jsx-typescript.git
+git clone git@github.com:styled-components/vim-styled-components.git
+git clone git@github.com:jparise/vim-graphql.git
