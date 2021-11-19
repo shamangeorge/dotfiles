@@ -5,8 +5,3 @@
 # PATH Config
 # Custom paths
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-
-# Setup some go configuration if you want to
-export GOROOT=$HOME/.local/src/go
-export GOPATH=$HOME/Developer/go
-export PATH=$GOPATH/bin:$GOROOT/bin:$PATH

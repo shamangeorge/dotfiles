@@ -6,7 +6,7 @@ if [ -d "$HOME/.nvm/" ]; then
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-  #  nvm alias default 10
+  nvm alias default 14
   nvm use 14
 fi
 
@@ -16,5 +16,13 @@ fi
 # This loads sdk man if it exists
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-# Direnv setup
-command -v direnv >/dev/null 2>&1 && eval "$(direnv hook bash)"
+# This loads cargo for rust packages
+[[ -s "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
+
+# Fuzzy finder installation
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# Setup some go configuration if you want to
+export GOROOT=$HOME/.local/src/go
+export GOPATH=$HOME/dev/go
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
