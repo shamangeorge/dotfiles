@@ -1,0 +1,92 @@
+[color]
+  ui = true
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+[color "diff-highlight"]
+  oldNormal = red bold
+  oldHighlight = red bold 52
+  newNormal = green bold
+  newHighlight = green bold 22
+[color "diff"]
+  meta = yellow
+  frag = magenta bold
+  old = red bold
+  new = green bold
+  commit = yellow bold
+  whitespace = red reverse
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = red
+[alias]
+  st = status
+  ci = commit
+  br = branch
+  brname = !git branch | grep "^*" | awk '{ print $2 }'
+  # Show all branches
+  abr = branch -av
+  # Delete a branch
+  brdel = branch -D
+  co = checkout
+  df = diff
+  # pretty git log
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr - %cn)%Creset' --abbrev-commit --date=relative
+  # pretty git log with file references
+  lgn = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr - %cn)%Creset' --abbrev-commit --date=relative --name-only
+  # Show all of my configured aliases
+  aliases = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort
+  # Which files are receiving the most "love"
+  churn = !git log --all -M -C --name-only --format='format:' "$@" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print "count,file"} {print $1 "," $2}'
+  # View the log and diff for a commit (previous if no SHA1 provided)
+  details = log -n1 -p --format=fuller
+  # Save a repo as a tarball
+  export = archive -o latest.tar.gz -9 --prefix=latest/
+  unstage = reset HEAD --
+  # Return a list of commit SHA1s
+  l = "!f() { git log $* | grep '^commit ' | cut -f 2 -d ' '; }; f"
+  # Remove deleted files
+  r = !git ls-files -z --deleted | xargs -0 git rm
+  # Return the repository's root directory (usefull for shell prompts)
+  root = rev-parse --show-toplevel
+  # Update all submodules
+  subup = submodule update --init
+  # List all tags
+  tags = tag -l
+  # Start a new local repository and perform initial commit
+  this = !git init && git add . && git commit -m \"Initial commit.\"
+  # Thin out older metadata within the repository, reduceses filesystem footprint
+  trim = !git reflog expire --expire=now --all && git gc --prune=now
+[branch]
+  autosetupmerge = true
+  autosetuprebase = always
+[core]
+  whitespace = trailing-space,space-before-tab
+  autocrlf = input
+  compression = 9
+	excludesfile = ~/.gitignore_global
+  filemode = false
+  # use diff so fancy (https://github.com/so-fancy/diff-so-fancy)
+  pager = diff-so-fancy | less --tabs=4 -RFX
+[rerere]
+  # https://git-scm.com/docs/git-rerere
+  enabled = 1
+[push]
+  default = current
+[diff]
+  mnemonicprefix = true
+[merge]
+  stat = true
+  log = true
+  ff = false
+[commit]
+# Always sign your commits
+#  gpgsign = true
+[user]
+  email = <your_email>
+  name = <your_name>
+  # The key to sign your commits with
+#  signingkey = <your_signing_key>
+[credential]
+  helper = cache --timeout=63600
