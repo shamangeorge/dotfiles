@@ -1,0 +1,88 @@
+call janus#disable_plugin('ack')
+call janus#disable_plugin('vim-gitgutter')
+" TODO: why is this causing trouble in latest master branches
+" for both vim and nvim ?
+call janus#disable_plugin('tlib')
+call janus#disable_plugin('lsp-colors.nvim')
+
+" handy live resourcing
+nnoremap <leader>sv :source $MYVIMRC<CR>
+
+if has('nvim')
+  tnoremap <Esc> <C-\><C-n>
+  tnoremap <A-h> <C-\><C-n><C-w>LEFT
+  tnoremap <A-j> <C-\><C-n><C-w>UP
+  tnoremap <A-k> <C-\><C-n><C-w>DOWN
+  tnoremap <A-l> <C-\><C-n><C-w>RIGHT
+  nnoremap <A-h> <C-w>LEFT
+  nnoremap <A-j> <C-w>UP
+  nnoremap <A-k> <C-w>DOWN
+  nnoremap <A-l> <C-w>RIGHT
+
+  " nvim-dashboard https://github.com/glepnir/dashboard-nvim
+  let g:dashboard_default_executive ='telescope'
+  nmap <Leader>ss :<C-u>SessionSave<CR>
+  nmap <Leader>sl :<C-u>SessionLoad<CR>
+  nnoremap <silent> <Leader>fh :DashboardFindHistory<CR>
+  nnoremap <silent> <Leader>ff :DashboardFindFile<CR>
+  nnoremap <silent> <Leader>tc :DashboardChangeColorscheme<CR>
+  nnoremap <silent> <Leader>fa :DashboardFindWord<CR>
+  nnoremap <silent> <Leader>fb :DashboardJumpMark<CR>
+  nnoremap <silent> <Leader>cn :DashboardNewFile<CR>
+  let g:dashboard_custom_header =[
+    \'⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ',
+    \'⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡖⠁⠀⠀⠀⠀⠀⠀⠈⢲⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀ ',
+    \'⠀⠀⠀⠀⠀⠀⠀⠀⣼⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣧⠀⠀⠀⠀⠀⠀⠀⠀ ',
+    \'⠀⠀⠀⠀⠀⠀⠀⣸⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣇⠀⠀⠀⠀⠀⠀⠀ ',
+    \'⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⢀⣀⣤⣤⣤⣤⣀⡀⠀⢸⣿⣿⠀⠀⠀⠀⠀⠀⠀ ',
+    \'⠀⠀⠀⠀⠀⠀⠀⢻⣿⣿⣔⢿⡿⠟⠛⠛⠻⢿⡿⣢⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀ ',
+    \'⠀⠀⠀⠀⣀⣤⣶⣾⣿⣿⣿⣷⣤⣀⡀⢀⣀⣤⣾⣿⣿⣿⣷⣶⣤⡀⠀⠀⠀⠀ ',
+    \'⠀⠀⢠⣾⣿⡿⠿⠿⠿⣿⣿⣿⣿⡿⠏⠻⢿⣿⣿⣿⣿⠿⠿⠿⢿⣿⣷⡀⠀⠀ ',
+    \'⠀⢠⡿⠋⠁⠀⠀⢸⣿⡇⠉⠻⣿⠇⠀⠀⠸⣿⡿⠋⢰⣿⡇⠀⠀⠈⠙⢿⡄⠀ ',
+    \'⠀⡿⠁⠀⠀⠀⠀⠘⣿⣷⡀⠀⠰⣿⣶⣶⣿⡎⠀⢀⣾⣿⠇⠀⠀⠀⠀⠈⢿⠀ ',
+    \'⠀⡇⠀⠀⠀⠀⠀⠀⠹⣿⣷⣄⠀⣿⣿⣿⣿⠀⣠⣾⣿⠏⠀⠀⠀⠀⠀⠀⢸⠀ ',
+    \'⠀⠁⠀⠀⠀⠀⠀⠀⠀⠈⠻⢿⢇⣿⣿⣿⣿⡸⣿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠈⠀ ',
+    \'⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⣿⣿⣿⣿⣧⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ',
+    \'⠀⠀⠀⠐⢤⣀⣀⢀⣀⣠⣴⣿⣿⠿⠋⠙⠿⣿⣿⣦⣄⣀⠀⠀⣀⡠⠂⠀⠀⠀ ',
+    \'⠀⠀⠀⠀⠀⠈⠉⠛⠛⠛⠛⠉⠀⠀⠀⠀⠀⠈⠉⠛⠛⠛⠛⠋⠁⠀⠀⠀⠀⠀ ',
+    \]
+  "let g:dashboard_custom_shortcut_icon['last_session'] = ' '
+  "let g:dashboard_custom_shortcut_icon['find_history'] = 'ﭯ '
+  "let g:dashboard_custom_shortcut_icon['find_file'] = ' '
+  "let g:dashboard_custom_shortcut_icon['new_file'] = ' '
+  "let g:dashboard_custom_shortcut_icon['change_colorscheme'] = ' '
+  "let g:dashboard_custom_shortcut_icon['find_word'] = ' '
+  "let g:dashboard_custom_shortcut_icon['book_marks'] = ' '
+
+  " vim trouble https://github.com/folke/trouble.nvim
+  nnoremap <leader>xx <cmd>TroubleToggle<cr>
+  nnoremap <leader>xw <cmd>TroubleToggle workspace_diagnostics<cr>
+  nnoremap <leader>xd <cmd>TroubleToggle document_diagnostics<cr>
+  nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
+  nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
+  nnoremap gR <cmd>TroubleToggle lsp_references<cr>
+else
+  call janus#disable_plugin('telescope.nvim')
+  call janus#disable_plugin('trouble.nvim')
+  call janus#disable_plugin('dashboard-nvim')
+  call janus#disable_plugin('nvim-treesitter')
+endif
+
+" vim-buffet remappings
+" https://github.com/bagrat/vim-buffet
+nmap <leader>1 <Plug>BuffetSwitch(1)
+nmap <leader>2 <Plug>BuffetSwitch(2)
+nmap <leader>3 <Plug>BuffetSwitch(3)
+nmap <leader>4 <Plug>BuffetSwitch(4)
+nmap <leader>5 <Plug>BuffetSwitch(5)
+nmap <leader>6 <Plug>BuffetSwitch(6)
+nmap <leader>7 <Plug>BuffetSwitch(7)
+nmap <leader>8 <Plug>BuffetSwitch(8)
+nmap <leader>9 <Plug>BuffetSwitch(9)
+nmap <leader>0 <Plug>BuffetSwitch(10)
+
+" floaterm https://github.com/voldikss/vim-floaterm
+let g:floaterm_keymap_new    = '<F7>'
+let g:floaterm_keymap_prev   = '<F8>'
+let g:floaterm_keymap_next   = '<F9>'
+let g:floaterm_keymap_toggle = '<F12>'
