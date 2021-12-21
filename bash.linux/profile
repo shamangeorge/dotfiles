@@ -1,4 +1,0 @@
-# Path to the central configuration
-export MY_BASH="$HOME/.config/bash"
-
-[ -n "$PS1" ] && source $MY_BASH/bashrc

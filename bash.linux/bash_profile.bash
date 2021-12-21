@@ -8,10 +8,10 @@ if [ -f /etc/bash_completion ]; then
 fi
 
 # Path to the central configuration
-export MY_BASH="$HOME/.config/bash"
+export MY_BASH="$HOME/.local/dotfiles/bash.linux"
 
 # Load the shell dotfiles, and then some:
-for file in $MY_BASH/config/{path,exports,extra,aliases,functions}; do
+for file in $MY_BASH/custom/{path,exports,extra,aliases,functions}.bash; do
 	[ -r "$file" ] && . "$file"
 done
 unset file
@@ -125,7 +125,12 @@ prompt ()
 {
   prompt_developer;
 }
+
 # Drag the history along in all sessions
 export PROMPT_COMMAND="history -a; history -c; history -r; prompt;"
+
+
 # Direnv setup
 command -v direnv >/dev/null 2>&1 && eval "$(direnv hook bash)"
+# Fuzzy finder installation
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

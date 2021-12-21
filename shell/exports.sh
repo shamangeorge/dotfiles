@@ -1,7 +1,15 @@
 export TMP_DIR=$HOME/.config/tmp
 export LOG_DIR=$TMP_DIR/.log
 export SSH_CONTROL_PATH=$TMP_DIR/.ssh
-export EDITOR="nvim"
+# You may need to manually set your language environment
+export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='nvim'
+else
+  export EDITOR='nvim'
+fi
 
 # Bash History Config
 # Larger bash history (allow 32³ entries; default is 500)
@@ -41,4 +49,4 @@ export LESS_TERMCAP_us=$(printf '\e[04;36m') # enter underline mode – cyan
 
 # GPG agent setup
 # https://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG_002dAGENT.html
-export GPG_TTY=$(tty)
+# export GPG_TTY=$(tty)
