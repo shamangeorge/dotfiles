@@ -65,10 +65,15 @@
   whitespace = trailing-space,space-before-tab
   autocrlf = input
   compression = 9
-	excludesfile = ~/.gitignore_global
+  excludesfile = ~/.gitignore_global
   filemode = false
   # use diff so fancy (https://github.com/so-fancy/diff-so-fancy)
-  pager = diff-so-fancy | less --tabs=4 -RFX
+  # pager = diff-so-fancy | less --tabs=4 -RFX
+  # use delta
+  pager = delta
+  eol = lf
+[interactive]
+  diffFilter = delta --color-only --features=interactive
 [rerere]
   # https://git-scm.com/docs/git-rerere
   enabled = 1
@@ -80,13 +85,31 @@
   stat = true
   log = true
   ff = false
+[gpg]
+	program = gpg2
 [commit]
-# Always sign your commits
-#  gpgsign = true
+  # Always sign your commits
+  #  gpgsign = true
 [user]
   email = <your_email>
   name = <your_name>
   # The key to sign your commits with
-#  signingkey = <your_signing_key>
+  #  signingkey = <your_signing_key>
 [credential]
   helper = cache --timeout=63600
+
+# Delta configuration
+[delta]
+  features = decorations
+
+[delta "interactive"]
+  keep-plus-minus-markers = false
+
+[delta "decorations"]
+  commit-decoration-style = blue ol
+  commit-style = raw
+  file-style = omit
+  hunk-header-decoration-style = blue box
+  hunk-header-file-style = red
+  hunk-header-line-number-style = "#067a00"
+  hunk-header-style = file line-number syntax
