@@ -9,6 +9,8 @@ call janus#disable_plugin('lsp-colors.nvim')
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
 if has('nvim')
+  call janus#disable_plugin('snipmate')
+
   tnoremap <Esc> <C-\><C-n>
   tnoremap <A-h> <C-\><C-n><C-w>LEFT
   tnoremap <A-j> <C-\><C-n><C-w>UP

@@ -72,3 +72,4 @@ git clone git@github.com:folke/lsp-colors.nvim.git
 #git clone git@github.com:folke/todo-comments.nvim.git
 git clone git@github.com:dense-analysis/ale.git # background functions for linting
 git@github.com:lambdalisue/vim-manpager.git # use vim as the manpager
+git clone https://github.com/jvirtanen/vim-hcl.git # hashicorp config language syntax

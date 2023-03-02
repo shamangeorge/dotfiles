@@ -17,18 +17,20 @@ if (empty($TMUX))
   endif
 endif
 
-set t_Co=256
-let g:gruvbox_italic=1
-colorscheme gruvbox
-
-" material theme if you so wish
-"let g:material_terminal_italics = 1
-"let g:material_theme_style = 'darker'
-"colorscheme material
-
-"color molokai
-" let g:enfocado_style = "neon"
-" let g:airline_theme = "enfocado"
+if has('nvim')
+  set t_Co=256
+  let g:gruvbox_italic=1
+  colorscheme gruvbox
+  "colorscheme nord
+else
+  " material theme if you so wish
+  " let g:material_terminal_italics = 1
+  " let g:material_theme_style = 'darker'
+  " colorscheme material
+  " color molokai
+  let g:enfocado_style = "neon"
+  let g:airline_theme = "enfocado"
+endif
 
 " ############################################################################
 " notes.vim
@@ -511,3 +513,9 @@ let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
 \   'javascript': ['eslint'],
 \}
+
+" Highlight tabs as errors.
+" " https://vi.stackexchange.com/a/9353/3168
+match Error /\t/
+
+set mouse=
