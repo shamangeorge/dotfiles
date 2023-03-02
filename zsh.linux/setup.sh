@@ -17,3 +17,4 @@ ln -svif $MY_ZSH/zshrc.zsh $HOME/.zshrc
 ln -svif $MY_ZSH/zlogin.zsh $HOME/.zlogin
 ln -svif $MY_ZSH/zshenv.zsh $HOME/.zshenv
 ln -svif $MY_ZSH/p10k.zsh $HOME/.p10k.zsh
+ln -svif $MY_ZSH/custom $HOME/.oh-my-zsh/custom

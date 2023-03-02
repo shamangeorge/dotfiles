@@ -78,7 +78,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git kubectl nvm cargo bundler ruby rvm direnv yarn ubuntu tmux fzf virtualenv npm ag aws)
+plugins=(git kubectl nvm rust bundler ruby rvm direnv yarn ubuntu tmux fzf virtualenv npm ag aws zsh-syntax-highlighting zsh-autosuggestions fzf-zsh-plugin history-substring-search history sudo terraform zsh-tfenv)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -104,3 +104,8 @@ source $ZSH/oh-my-zsh.sh
 # Fuzzy finder installation
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 eval "$(direnv hook zsh)"
+export GPG_TTY=$(tty)
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
