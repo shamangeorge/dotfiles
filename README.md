@@ -38,11 +38,12 @@ find . -type d -mindepth 1 -maxdepth 1 -exec git --git-dir={}/.git --work-tree=$
 Check out giconfig for values. Some things used are:
 
 delta, TODO: link here
+
 TODO: fallback to diff-so-fancy
+
 gpg config for git
 * use gpg2 by default
-* sudo update-alternatives --config pinentry (make it so that it uses
-  pinentry-curses and doesnt grab the diplay)
+* sudo update-alternatives --config pinentry (make it so that it uses pinentry-curses and doesnt grab the diplay)
 
 
 #### Generic shell agnostic stuff to be used in both bash and zsh or any shell to setup (although its already setup in git as symlinks)
