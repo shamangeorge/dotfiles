@@ -75,4 +75,5 @@ git@github.com:lambdalisue/vim-manpager.git # use vim as the manpager
 git clone https://github.com/jvirtanen/vim-hcl.git # hashicorp config language syntax
 git clone https://github.com/shaunsingh/nord.nvim.git # nord color scheme
 git clone git@github.com:morhetz/gruvbox.git # gruvbox (my theme of choice)
+git clone git@github.com:sainnhe/gruvbox-material.git # gruvbox-material theme
 git clone git@github.com:wuelnerdotexe/vim-enfocado.git # another cool color theme
