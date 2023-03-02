@@ -134,3 +134,4 @@ export PROMPT_COMMAND="history -a; history -c; history -r; prompt;"
 command -v direnv >/dev/null 2>&1 && eval "$(direnv hook bash)"
 # Fuzzy finder installation
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+export GPG_TTY=$(tty)
